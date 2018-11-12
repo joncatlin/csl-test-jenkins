@@ -30,7 +30,7 @@ node("docker") {
     stage ('build') {
         echo 'Building..'
 //        def app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
-        def app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
+        app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
     }
 
     stage ('publish') {
