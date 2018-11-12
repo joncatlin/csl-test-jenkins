@@ -34,14 +34,14 @@ node("docker") {
     def app
     stage ('build') {
         echo 'Building..'
-//        def app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
-        app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
+//        app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
+        app docker.build registry + ":$BUILD_NUMBER"
     }
 
     stage ('publish') {
         echo 'Publishing..'
+        app.push
         app.push 'latest'
-        app.push "${env.BUILD_ID}"
     }
 }
 
