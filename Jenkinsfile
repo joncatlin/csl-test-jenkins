@@ -26,8 +26,10 @@ node("docker") {
         checkout scm
     }
 
+    def app
     stage ('build') {
         echo 'Building..'
+//        def app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
         def app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
     }
 
