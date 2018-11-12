@@ -22,6 +22,11 @@ node("docker") {
 
 node("docker") {
 
+    environment {
+        registry = "joncatlin/csl-test-jenkins"
+        registryCredential = 'demo-dockerhub-credentials'
+    }
+
     stage ('checkout') {
         checkout scm
     }
