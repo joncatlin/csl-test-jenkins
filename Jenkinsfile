@@ -33,9 +33,8 @@ node("docker") {
 
     def app
     stage ('build') {
-        echo 'Building..'
 //        app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
-        app docker.build registry + ":$BUILD_NUMBER"
+        app = docker.build registry + ":$BUILD_NUMBER"
     }
 
     stage ('publish') {
