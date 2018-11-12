@@ -22,15 +22,20 @@ node("docker") {
 
 node("docker") {
 
-    stage "checkout"
-    checkout scm
+    stage ('checkout') {
+        checkout scm
+    }
 
-    stage "build"
-    def app = docker.build("csl-test-jenkins-:${env.BUILD_ID}")
+    stage ('build') {
+        echo 'Building..'
+        def app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
+    }
 
-    stage "publish"
-    app.push 'latest'
-    app.push "${env.BUILD_ID}"
+    stage ('publish') {
+        echo 'Publishing..'
+        app.push 'latest'
+        app.push "${env.BUILD_ID}"
+    }
 }
 
 /*
