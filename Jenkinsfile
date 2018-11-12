@@ -22,6 +22,9 @@ node("docker") {
 
 node("docker") {
 
+    def app
+    def registry
+    
     environment {
         registry = "joncatlin/csl-test-jenkins"
         registryCredential = 'demo-dockerhub-credentials'
@@ -31,7 +34,6 @@ node("docker") {
         checkout scm
     }
 
-    def app
     stage ('build') {
 //        app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
         app = docker.build registry + ":$BUILD_NUMBER"
