@@ -37,10 +37,8 @@ node("docker") {
     stage ('build') {
 //        app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
 //        app = docker.build registry + ":$BUILD_NUMBER"
-        steps{
-            script {
-                app = docker.build registry + ":$BUILD_NUMBER"
-            }
+        script {
+            app = docker.build registry + ":$BUILD_NUMBER"
         }
     }
 
