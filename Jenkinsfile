@@ -15,7 +15,7 @@ node("docker") {
     }
 
     stage ('build') {
-        app = docker.build("csl-test-jenkins:${env.BUILD_ID}")
+        app = docker.build("joncatlin/csl-test-jenkins:${env.BUILD_ID}")
 //        app = docker.build registry + ":$BUILD_NUMBER"
 /*
         script {
