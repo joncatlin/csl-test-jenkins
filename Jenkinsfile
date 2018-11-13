@@ -24,11 +24,11 @@ node("docker") {
     stage ('publish') {
         docker.withRegistry(registry, registryCredential) {
 
-            // Push the current version
-            app.push()
-
             // Push the current version as the lastest version
             app.push('latest')
+
+            // Push the current version
+            app.push("${env.BUILD_ID}")
         }
     }
 
