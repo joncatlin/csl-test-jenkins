@@ -50,6 +50,7 @@ node("docker") {
         sh "docker stack rm ${env.DOCKER_STACK_NAME}"
 
         // Wait a short time for the system to tidy up
+        sleep 5 SECONDS
 
         // Deploy the stack in the existing swarm
         sh 'docker stack deploy --compose-file ' + composeFilename + " ${env.DOCKER_STACK_NAME}"
