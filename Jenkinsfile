@@ -27,7 +27,7 @@ node("docker") {
         echo 'Publishing..'
     }
 
-    docker.withRegistry(registry, registryCredential) {
+    docker.withRegistry(registry, 'demo-dockerhub-credentials') {
 
         app.push()
         app.push('latest')
