@@ -1,7 +1,7 @@
 node("docker") {
 
     def app
-    def registry = 'registry.hub.docker.io'
+    def registry = 'https://registry.hub.docker.io'
     def registryCredential = 'demo-dockerhub-credentials'
 
 //    environment {
