@@ -46,11 +46,12 @@ node("docker") {
     }
 
     stage ('deploy') {
-        // Remove the stack if it already exists
-        sh "docker stack rm ${env.DOCKER_STACK_NAME}"
+        // // Remove the stack if it already exists
+        // sh "docker stack rm ${env.DOCKER_STACK_NAME}"
 
-        // Wait a short time for the system to tidy up
-        sleep 5
+        // // Wait a short time for the system to tidy up or the creation of the stack can
+        // // collide with the previous remove of the stack
+        // sleep 30
 
         // Deploy the stack in the existing swarm
         sh 'docker stack deploy --compose-file ' + composeFilename + " ${env.DOCKER_STACK_NAME}"
