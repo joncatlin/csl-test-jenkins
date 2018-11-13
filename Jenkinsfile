@@ -34,6 +34,11 @@ node("docker") {
 
     stage ('test') {
         try {
+            // Remove any chance that the container could be left from previous attempts to test
+            sh 'docker stop ' + appName
+            sh 'docker rm ' + appName
+
+            // Run the container to ensure it works
             container = app.run('--name ' + appName)
 
             // Get the logs of the container to show in the jenkins log as this will contain the text to prove that
