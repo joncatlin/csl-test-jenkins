@@ -1,3 +1,7 @@
+/*
+    This file defines the Jenkins pipeline to be executed in order to build and test this application. The 
+    file is referenced inside of a Jenkins pipeline job which uses the github repo to locate and execute this file.
+*/
 node("docker") {
 
     // Define variables for use below
@@ -24,7 +28,7 @@ node("docker") {
             sh 'docker logs ' + appName
         }
         finally {
-            container.stop
+            try { container.stop } catch (ex) { /* ignore */ }
         }
     }
 
