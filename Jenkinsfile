@@ -11,6 +11,7 @@ node("docker") {
     def registryCredential = 'demo-dockerhub-credentials'
     def appName = 'csl-test-jenkins'
     def imageName = "joncatlin/" + appName + ":${env.BUILD_ID}"
+    def composeFilename = 'csl-test-jenkins-compose.yml'
 
     stage ('checkout') {
         checkout scm
@@ -19,19 +20,6 @@ node("docker") {
     stage ('build') {
         app = docker.build(imageName)
     }
-
-    stage ('test') {
-        try {
-            container = app.run('--name ' + appName)
-
-            // Get the logs of the container
-            sh 'docker logs ' + appName
-        }
-        finally {
-            try { container.stop } catch (ex) { /* ignore */ }
-        }
-    }
-
 
     stage ('publish') {
         docker.withRegistry(registry, registryCredential) {
@@ -44,6 +32,28 @@ node("docker") {
         }
     }
 
+    stage ('test') {
+        try {
+            container = app.run('--name ' + appName)
+
+            // Get the logs of the container to show in the jenkins log as this will contain the text to prove that
+            // the build job was successful
+            sh 'docker logs ' + appName
+        }
+        finally {
+            try { container.stop } catch (ex) { /* ignore */ }
+        }
+    }
+
+    stage ('deploy') {
+        // Remove the stack if it already exists
+        sh "docker stack rm ${env.DOCKER_STACK_NAME}"
+
+        // Wait a short time for the system to tidy up
+
+        // Deploy the stack in the existing swarm
+        sh 'docker stack deploy --compose-file ' + composeFilename + " ${env.DOCKER_STACK_NAME}"
+    }
 
 }
 
