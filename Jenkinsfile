@@ -2,9 +2,11 @@ node("docker") {
 
     // Define variables for use below
     def app
+    def container
     def registry = 'https://index.docker.io/v1/'
     def registryCredential = 'demo-dockerhub-credentials'
-    def imageName = "joncatlin/csl-test-jenkins:${env.BUILD_ID}"
+    def appName = 'csl-test-jenkins'
+    def imageName = "joncatlin/" + appName + ":${env.BUILD_ID}"
 
     stage ('checkout') {
         checkout scm
@@ -15,7 +17,15 @@ node("docker") {
     }
 
     stage ('test') {
-        app.run()
+        try {
+            container = app.run('--name ' + appName)
+
+            // Get the logs of the container
+            sh 'docker logs ' + appName
+        }
+        finally {
+            container.stop
+        }
     }
 
 
