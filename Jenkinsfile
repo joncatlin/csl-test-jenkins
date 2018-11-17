@@ -10,7 +10,7 @@ node("docker") {
     def stackName
 
     // Get the name of the user who started the build
-    wrap([$class: 'BuildUser']) { stackName = ${env.BUILD_USER_ID}}
+    wrap([$class: 'BuildUser']) { stackName = "${env.BUILD_USER_ID}"}
 
     def registry = 'https://index.docker.io/v1/'
     def registryCredential = 'demo-dockerhub-credentials'
