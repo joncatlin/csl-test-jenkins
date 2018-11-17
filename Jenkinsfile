@@ -7,6 +7,11 @@ node("docker") {
     // Define variables for use below
     def app
     def container
+    def stackName
+
+    // Get the name of the user who started the build
+    wrap([$class: 'BuildUser']) { stackName = ${env.BUILD_USER_ID}}
+
     def registry = 'https://index.docker.io/v1/'
     def registryCredential = 'demo-dockerhub-credentials'
     def appName = 'csl-test-jenkins'
@@ -59,36 +64,8 @@ node("docker") {
         // sleep 30
 
         // Deploy the stack in the existing swarm
-        sh 'docker stack deploy --compose-file ' + composeFilename + " ${env.DOCKER_STACK_NAME}"
+        sh 'docker stack deploy --compose-file ' + composeFilename + " " + stackName
     }
 
-//     stage('deploy-production') {
-// //        when { 
-// //            environment name: 'DEPLOY_TO', value: 'production' 
-// //        }
-//         steps {
-//             input 'Does the staging environment look OK?'
-//             milestone(1)
-//             withCredentials([string(credentialsId: 'cloud_user_pw', variable: 'USERPASS')]) {
-//                 sshPublisher(
-//                     failOnError: true,
-//                     publishers: [
-//                         sshPublisherDesc(
-//                             configName: 'production',
-//                             sshCredentials: [
-//                                 username: 'joncatlin',
-//                                 encryptedPassphrase: 'Angval_01'
-//                             ], 
-//                             transfers: [
-//                                 sshTransfer(
-//                                     sourceFiles: composeFilename
-//                                 )
-//                             ]
-//                         )
-//                     ]
-//                 )
-//             }
-//         }
-//     }
 }
 
