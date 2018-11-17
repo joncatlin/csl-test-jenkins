@@ -35,8 +35,8 @@ node("docker") {
     stage ('test') {
         try {
             // Remove any chance that the container could be left from previous attempts to test
-            sh 'docker stop ' + appName
-            sh 'docker rm ' + appName
+            try {sh 'docker stop ' + appName} catch (ex) {/* ignore */}
+            try {sh 'docker rm ' + appName} catch (ex) {/* ignore */}
 
             // Run the container to ensure it works
             container = app.run('--name ' + appName)
@@ -50,7 +50,7 @@ node("docker") {
         }
     }
 
-    stage ('deploy') {
+    stage ('deploy-locally') {
         // // Remove the stack if it already exists
         // sh "docker stack rm ${env.DOCKER_STACK_NAME}"
 
@@ -62,5 +62,33 @@ node("docker") {
         sh 'docker stack deploy --compose-file ' + composeFilename + " ${env.DOCKER_STACK_NAME}"
     }
 
+//     stage('deploy-production') {
+// //        when { 
+// //            environment name: 'DEPLOY_TO', value: 'production' 
+// //        }
+//         steps {
+//             input 'Does the staging environment look OK?'
+//             milestone(1)
+//             withCredentials([string(credentialsId: 'cloud_user_pw', variable: 'USERPASS')]) {
+//                 sshPublisher(
+//                     failOnError: true,
+//                     publishers: [
+//                         sshPublisherDesc(
+//                             configName: 'production',
+//                             sshCredentials: [
+//                                 username: 'joncatlin',
+//                                 encryptedPassphrase: 'Angval_01'
+//                             ], 
+//                             transfers: [
+//                                 sshTransfer(
+//                                     sourceFiles: composeFilename
+//                                 )
+//                             ]
+//                         )
+//                     ]
+//                 )
+//             }
+//         }
+//     }
 }
 
