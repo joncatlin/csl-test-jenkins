@@ -9,17 +9,23 @@ node("docker") {
     def container
     def stackName
     def version
+    def imageName
+
+    // Set the name of the docker repository to be used
+    def registry = 'https://index.docker.io/v1/'
+
+    // Set the name of the Jenkins credentials to be used to login to the Docker repository
+    def registryCredential = 'demo-dockerhub-credentials'
+
+    def appName = 'csl-test-jenkins'
+
+    // Set the name of the compose file to be used in deploying the container into a swarm
+    def composeFilename = 'csl-test-jenkins-compose.yml'
 
     // Get the name of the user who started the build. 
     // This will be used for the stack name in 'docker stack deploy ...'
     wrap([$class: 'BuildUser']) { stackName = "${env.BUILD_USER_ID}"}
 
-
-    def registry = 'https://index.docker.io/v1/'
-    def registryCredential = 'demo-dockerhub-credentials'
-    def appName = 'csl-test-jenkins'
-    def imageName = "joncatlin/" + appName + ":${env.BUILD_ID}"
-    def composeFilename = 'csl-test-jenkins-compose.yml'
 
     stage ('checkout') {
         checkout scm
@@ -32,10 +38,12 @@ node("docker") {
             version = ${env.VERSION}
         }
         println "Version to tag image with = " + version
-
     }
 
     stage ('build') {
+        def build = ".build-" + System.currentTimeMillis()
+        println "Build to tag image with = " + build
+        imageName = "joncatlin/" + appName + version + build
         app = docker.build(imageName)
     }
 
