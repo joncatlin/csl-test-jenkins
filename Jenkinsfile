@@ -11,6 +11,7 @@ node("docker") {
     def version
     def imageName
     def appName
+    def build
 
     // Set the name of the docker repository to be used
     def registry = 'https://index.docker.io/v1/'
@@ -47,7 +48,7 @@ node("docker") {
     }
 
     stage ('build') {
-        def build = ".build-" + System.currentTimeMillis()
+        build = ".build-" + System.currentTimeMillis()
         println "Build to tag image with = " + build
         imageName = "joncatlin/" + appName + ":" + version + build
         app = docker.build(imageName)
@@ -59,8 +60,8 @@ node("docker") {
             // Push the current version as the lastest version
             app.push('latest')
 
-            // Push the current version
-            app.push(version)
+            // Push the current version and reset the version as the previous line changed it
+            app.push(version + build)
         }
     }
 
