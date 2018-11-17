@@ -10,14 +10,13 @@ node("docker") {
     def stackName
     def version
     def imageName
+    def appName
 
     // Set the name of the docker repository to be used
     def registry = 'https://index.docker.io/v1/'
 
     // Set the name of the Jenkins credentials to be used to login to the Docker repository
     def registryCredential = 'demo-dockerhub-credentials'
-
-    def appName = 'csl-test-jenkins'
 
     // Set the name of the compose file to be used in deploying the container into a swarm
     def composeFilename = 'csl-test-jenkins-compose.yml'
@@ -29,6 +28,10 @@ node("docker") {
 
     stage ('checkout') {
         checkout scm
+
+        // Get the name of the repo and use that as the image name
+        appName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+        println "Application name, derived from git repo = '" + appName + "'"
 
         if (!env.VERSION) {
             // Get the latest version tag from the repo. Version tags are in the format v1.0.1, 
