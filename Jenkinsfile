@@ -34,10 +34,13 @@ node("docker") {
             // Get the latest version tag from the repo. Version tags are in the format v1.0.1, 
             // a v at the beginning of the line followed by digits '.' digits '.' digits
             version = sh(script: "git tag | sed -n -e 's/^v\\([0-9]*\\.[0-9]*\\.[0-9]*\\)/\\1/p' | tail -1", returnStdout: true)
+
+            // Remove any rubbish charactes from the version
+            version = version.replaceAll("\\s","")
         } else {
             version = ${env.VERSION}
         }
-        println "Version to tag image with = ''" + version + "'"
+        println "Version to tag image with = '" + version + "'"
     }
 
     stage ('build') {
