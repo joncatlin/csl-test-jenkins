@@ -37,7 +37,7 @@ node("docker") {
         } else {
             version = ${env.VERSION}
         }
-        println "Version to tag image with = " + version
+        println "Version to tag image with = ''" + version + "'"
     }
 
     stage ('build') {
