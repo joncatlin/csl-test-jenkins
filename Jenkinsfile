@@ -43,7 +43,7 @@ node("docker") {
     stage ('build') {
         def build = ".build-" + System.currentTimeMillis()
         println "Build to tag image with = " + build
-        imageName = "joncatlin/" + appName + version + build
+        imageName = "joncatlin/" + appName + ":" + version + build
         app = docker.build(imageName)
     }
 
