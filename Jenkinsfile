@@ -16,9 +16,9 @@ pipeline {
         CSL_REGISTRY = 'https://index.docker.io/v1/'
         CSL_COMPOSE_FILENAME = 'csl-test-jenkins-compose.yml'
         CSL_REGISTRY_CREDENTIALS = 'demo-dockerhub-credentials'
-        wrap([$class: 'BuildUser']) { 
-            CSL_STACK_NAME = "${env.BUILD_USER_ID}"
-        }
+//        wrap([$class: 'BuildUser']) { 
+//            CSL_STACK_NAME = "${env.BUILD_USER_ID}"
+//        }
     }
     stages {
         stage('checkout') {
