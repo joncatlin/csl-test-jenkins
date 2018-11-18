@@ -16,33 +16,43 @@ pipeline {
         CSL_REGISTRY = 'https://index.docker.io/v1/'
         CSL_COMPOSE_FILENAME = 'csl-test-jenkins-compose.yml'
         CSL_REGISTRY_CREDENTIALS = credentials('demo-dockerhub-credentials')
+        // Get the name of the user who started this build
+        wrap([$class: 'BuildUser']) { 
+            env.CSL_STACK_NAME = "${env.BUILD_USER_ID}"
+        }
     }
     stages {
         stage('checkout') {
             steps {
                 checkout scm
 
-                sh 'printenv'
-            }
-        }
-
-        stage('printenv') {
-            steps {
                 script { 
-                    def csl_repo_name = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                    env.CSL_REPO_NAME = csl_repo_name
-//                    sh 'export CSL_REPO_NAME="' + csl_repo_name + '"'
-                    wrap([$class: 'BuildUser']) { 
-                        def csl_stack_name = "${env.BUILD_USER_ID}"
-//                        sh 'export CSL_STACK_NAME=' + csl_stack_name
-                        env.CSL_STACK_NAME = csl_stack_name
+                    // Get the name of the repo from the scm
+                    env.CSL_REPO_NAME = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                    // Use the time in ms as the build number
+                    env.CSL_BUILD = ".build-" + System.currentTimeMillis()
+
+                    if (!env.CSL_VERSION) {
+                        // Get the latest version tag from the repo. Version tags are in the format v1.0.1, 
+                        // a v at the beginning of the line followed by digits '.' digits '.' digits
+                        def version = sh(script: "git tag | sed -n -e 's/^v\\([0-9]*\\.[0-9]*\\.[0-9]*\\)/\\1/p' | tail -1", returnStdout: true)
+
+                        // Remove any rubbish charactes from the version
+                        env.CSL_VERSION = version.replaceAll("\\s","")
                     }
+
                 }
 
                 sh 'printenv'
-                println "Hi there jon this is a println"
             }
         }
+
+        stage ('build') {
+            
+            app = docker.build('jon')
+        }
+
+
     }
 
 
