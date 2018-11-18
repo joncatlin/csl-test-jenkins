@@ -17,13 +17,13 @@ pipeline {
     }
     stages {
         stage('checkout') {
-
-            checkout scm
-
             environment { 
                 CSL_REGISTRY_CREDENTIALS = 'demo-dockerhub-credentials'
             }
+
             steps {
+                checkout scm
+
                 sh 'printenv'
             }
         }
