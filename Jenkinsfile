@@ -30,15 +30,17 @@ pipeline {
             steps {
                 script { 
                     def csl_repo_name = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                    sh 'export CSL_REPO_NAME="' + csl_repo_name + '"'
+                    env.CSL_REPO_NAME = csl_repo_name
+//                    sh 'export CSL_REPO_NAME="' + csl_repo_name + '"'
                     wrap([$class: 'BuildUser']) { 
                         def csl_stack_name = "${env.BUILD_USER_ID}"
-                        sh 'export CSL_STACK_NAME=' + csl_stack_name
+//                        sh 'export CSL_STACK_NAME=' + csl_stack_name
+                        env.CSL_STACK_NAME = csl_stack_name
                     }
                 }
 
                 sh 'printenv'
-                println ""
+                println "Hi there jon this is a println"
             }
         }
     }
