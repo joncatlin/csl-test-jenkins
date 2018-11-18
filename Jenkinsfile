@@ -27,13 +27,13 @@ pipeline {
         }
 
         stage('printenv') {
-            script { 
-                def CSL_REPO_NAME = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                def CSL_STACK_NAME
-                wrap([$class: 'BuildUser']) { CSL_STACK_NAME = "${env.BUILD_USER_ID}"}
-            }
-
             steps {
+                script { 
+                    def CSL_REPO_NAME = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                    def CSL_STACK_NAME
+                    wrap([$class: 'BuildUser']) { CSL_STACK_NAME = "${env.BUILD_USER_ID}"}
+                }
+
                 sh 'printenv'
                 println ""
             }
