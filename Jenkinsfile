@@ -14,20 +14,33 @@ pipeline {
     environment { 
         CSL_MESSAGE = 'hi jon'
         CSL_REGISTRY = 'https://index.docker.io/v1/'
+        CSL_COMPOSE_FILENAME = 'csl-test-jenkins-compose.yml'
+        CSL_REGISTRY_CREDENTIALS = 'demo-dockerhub-credentials'
+        wrap([$class: 'BuildUser']) { 
+            CSL_STACK_NAME = "${env.BUILD_USER_ID}"
+        }
     }
     stages {
         stage('checkout') {
-            environment { 
-                CSL_REGISTRY_CREDENTIALS = 'demo-dockerhub-credentials'
-            }
-
             steps {
                 checkout scm
 
                 sh 'printenv'
             }
         }
+
+        environment { 
+            CSL_REPO_NAME = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+        }
+
+        stage('printenv') {
+            steps {
+                sh 'printenv'
+            }
+        }
     }
+
+
 }
 
 
