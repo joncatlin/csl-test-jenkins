@@ -16,10 +16,6 @@ pipeline {
         CSL_REGISTRY = 'https://index.docker.io/v1/'
         CSL_COMPOSE_FILENAME = 'csl-test-jenkins-compose.yml'
         CSL_REGISTRY_CREDENTIALS = credentials('demo-dockerhub-credentials')
-        // Get the name of the user who started this build
-        wrap([$class: 'BuildUser']) { 
-            env.CSL_STACK_NAME = "${env.BUILD_USER_ID}"
-        }
     }
     stages {
         stage('checkout') {
@@ -41,6 +37,10 @@ pipeline {
                         env.CSL_VERSION = version.replaceAll("\\s","")
                     }
 
+                    // Get the name of the user who started this build
+                    wrap([$class: 'BuildUser']) { 
+                        env.CSL_STACK_NAME = "${env.BUILD_USER_ID}"
+                    }
                 }
 
                 sh 'printenv'
@@ -48,8 +48,9 @@ pipeline {
         }
 
         stage ('build') {
-            
-            app = docker.build('jon')
+            steps {
+                app = docker.build('jon')
+            }
         }
 
 
