@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   csl-test-jenkins:
-    image: concord/csl-test-jenkins
+    image: research/csl-test-jenkins
     # Invoke the top command in the shell, so the container will wait to be closed
     command: top
 
