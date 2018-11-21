@@ -13,6 +13,9 @@ node("docker") {
     def appName
     def build
 
+    // Define the docker registry namespace
+    def registryNameSpace = 'research/'
+
     // Set the name of the docker registry to be used
 //    def registry = 'https://index.docker.io/v1/'
     def registry = 'https://289521388027.dkr.ecr.us-west-1.amazonaws.com'
@@ -50,7 +53,7 @@ node("docker") {
     stage ('build') {
         build = ".build-" + System.currentTimeMillis()
         println "Build to tag image with = " + build
-        imageName = "concord/" + appName + ":" + version + build
+        imageName = registryNameSpace + appName + ":" + version + build
         app = docker.build(imageName)
     }
 
