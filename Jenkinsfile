@@ -15,7 +15,7 @@ node("docker") {
 
     // Set the name of the docker registry to be used
 //    def registry = 'https://index.docker.io/v1/'
-    def registry = '289521388027.dkr.ecr.us-west-1.amazonaws.com'
+    def registry = 'https://289521388027.dkr.ecr.us-west-1.amazonaws.com'
 
 //    docker push 289521388027.dkr.ecr.us-west-1.amazonaws.com/concord/client_data_consumer_service_release:latest
 
