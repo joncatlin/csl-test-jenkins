@@ -105,9 +105,25 @@ node("docker") {
         }
     }
 
+
     stage ('deploy-locally') {
+
+        /*  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            The docker command to deploy the stack is executed on the hosts docker daemon. When using AWS registry the AWS command
+            also needs to be executed on the host and hence to deploy the static we use ssh to execute the commands
+        */
+        def sshCommand = '(aws ecr get-login --no-include-email --region us-west-1) | source /dev/stdin && ' +
+            'docker stack deploy --compose-file ' + composeFilename + " " + stackName
+
         // Deploy the stack in the existing swarm
-        sh 'docker stack deploy --compose-file ' + composeFilename + " " + stackName
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'Production', 
+            transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: sshCommand, execTimeout: 120000, 
+            flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', 
+            remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], 
+            usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+
+        // Deploy the stack in the existing swarm
+//        sh 'docker stack deploy --compose-file ' + composeFilename + " " + stackName
     }
 
 }
