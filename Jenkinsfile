@@ -116,7 +116,7 @@ node("docker") {
             'docker stack deploy --compose-file ' + composeFilename + " " + stackName
 
         // Deploy the stack in the existing swarm
-        sshPublisher(publishers: [sshPublisherDesc(configName: 'Production', 
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'Development', 
             transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: sshCommand, execTimeout: 120000, 
             flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', 
             remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], 
