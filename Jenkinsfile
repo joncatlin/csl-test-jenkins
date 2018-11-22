@@ -113,7 +113,7 @@ node("docker") {
             also needs to be executed on the host and hence to deploy the static we use ssh to execute the commands
         */
         def sshCommand = '(aws ecr get-login --no-include-email --region us-west-1) | source /dev/stdin && ' +
-            'docker stack deploy --compose-file ' + composeFilename + " " + stackName
+            'docker stack deploy --compose-file ./compose-files/' + composeFilename + " " + stackName
 
         // Deploy the stack in the existing swarm
         /*
