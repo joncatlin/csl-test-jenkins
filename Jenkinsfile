@@ -116,10 +116,17 @@ node("docker") {
             'docker stack deploy --compose-file ' + composeFilename + " " + stackName
 
         // Deploy the stack in the existing swarm
+        /*
         sshPublisher(publishers: [sshPublisherDesc(configName: 'Development', 
             transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: sshCommand, execTimeout: 120000, 
             flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', 
             remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], 
+            usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+        */
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'Development', 
+            transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: sshCommand, execTimeout: 120000, 
+            flatten: false, makeEmptyDirs: true, noDefaultExcludes: false, patternSeparator: '[, ]+', 
+            remoteDirectory: 'compose-files', remoteDirectorySDF: false, removePrefix: '', sourceFiles: composeFilename)], 
             usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 
         // Deploy the stack in the existing swarm
