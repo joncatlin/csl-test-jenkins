@@ -11,3 +11,12 @@ CSLDevelopmentPipeline {
     stagingServer = 'staging-myproject.mycompany.com'
     productionServer = 'production-myproject.mycompany.com'
 }
+
+def cslTest() {
+    println "********************** In cslTest() **************************"
+    println "********************** In cslTest() **************************"
+    println "********************** In cslTest() **************************"
+    println "********************** In cslTest() **************************"
+    println "********************** In cslTest() **************************"
+}
+
