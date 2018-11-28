@@ -18,11 +18,17 @@ CSLDevelopmentPipeline {
 /*
     Define the routine that will test the container to see if it works
 */
-def cslTest() {
+def cslTest(appName) {
     println "********************** In cslTest() **************************"
     println "********************** In cslTest() **************************"
     println "********************** In cslTest() **************************"
     println "********************** In cslTest() **************************"
     println "********************** In cslTest() **************************"
+
+
+    // Get the logs of the container to show in the jenkins log as this will contain the text to prove that
+    // the build job was successful
+    sh 'docker logs ' + appName
+
 }
 
