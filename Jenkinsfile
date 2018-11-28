@@ -2,11 +2,13 @@
     This file defines the Jenkins pipeline to be executed in order to build and test this application. The 
     file is referenced inside of a Jenkins pipeline job which uses the github repo to locate and execute this file.
 */
+
+// Create a variable 
 def thisTestMethod = this.&cslTest
 
 CSLDevelopmentPipeline {
     cslAWSRegistryPrefix = 'research/'
-    testMethod = thisTestMethod
+    testMethod = this.&cslTest
 /*
     branch = 'master'
     scmUrl = 'ssh://git@myScmServer.com/repos/myRepo.git'
